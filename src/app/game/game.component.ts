@@ -108,7 +108,7 @@ export class GameComponent implements AfterViewInit {
       const ballY = ballComponent.ref.instance.y;
       const requiredY = window.innerHeight - 40; // basket height
 
-      if (ballY >= requiredY && Math.abs(ballX - this.basket.x) < 80) {
+      if (ballY >= requiredY && Math.abs(ballX - this.basket.x) < 100) {
         this.score++;
         this._destroyBall(ballComponent);
       }

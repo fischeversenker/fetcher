@@ -14,15 +14,14 @@ export class KinectService {
 
   constructor() {
     this._kinectron = new Kinectron(SERVER_IP);
-
     this._kinectron.makeConnection();
-
     this._kinectron.startTrackedJoint(this._kinectron.SPINEMID, (head) => this.onTrackedHead(head));
   }
 
   onTrackedHead(data) {
-    if (data.cameraZ < 1.7){
-      this.positionChanges$.next(data.depthX * window.innerWidth);
+    if (data.cameraZ < 2){
+      const newX = (data.depthX * 1.5) - 0.4;
+      this.positionChanges$.next(newX * window.innerWidth);
     }
   }
 }
