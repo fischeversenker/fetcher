@@ -42,12 +42,6 @@ export class GameComponent implements AfterViewInit {
       }
     });
 
-    this._kinectService.gestureChanges$.subscribe((gesture: string) => {
-      if (gesture === 'SWIPE_LEFT') {
-        // Do something
-      }
-    });
-
     this._start();
   }
 
