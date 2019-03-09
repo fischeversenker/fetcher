@@ -1,5 +1,9 @@
 <template #balls></template>
 <app-basket></app-basket>
 
+<div *ngIf="timeLeft === 0" class="overlay"></div>
+<div *ngIf="timeLeft === 0 && score >= 10" class="win">You won!</div>
+<div *ngIf="timeLeft === 0 && score < 10" class="lost">Try again!</div>
+
 <div class='score'>Score: {{ score }}</div>
 <div class='countdown'>Time left: {{ timeLeft }}</div>

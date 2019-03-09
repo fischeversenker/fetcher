@@ -5,7 +5,7 @@ import { interval } from 'rxjs';
 import { takeUntil, takeWhile, finalize } from 'rxjs/operators';
 import { KinectService } from '../kinect.service';
 
-const BALL_ACCELERATION = 0.4;
+const BALL_ACCELERATION = 0.1;
 const GAME_DURATION = 30;
 
 @Component({
@@ -42,6 +42,8 @@ export class GameComponent implements AfterViewInit {
         this.addBall();
       }
     });
+
+    this.basket.x = window.innerWidth / 2;
 
     this._kinectService.positionChanges$.subscribe((x: number) => {
       if (!this.mouseActivated) {
