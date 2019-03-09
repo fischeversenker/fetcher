@@ -1,12 +1,12 @@
-import { Injectable, Output, AfterViewInit } from '@angular/core';
+import { Injectable, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 
-const SERVER_IP = '10.0.1.5';
+const SERVER_IP = '127.0.0.1';
 
 @Injectable({
   providedIn: 'root'
 })
-export class KinectService implements AfterViewInit {
+export class KinectService {
 
   @Output() positionChanges$: Subject<number> = new Subject();
 
@@ -14,27 +14,23 @@ export class KinectService implements AfterViewInit {
 
   constructor() {
     this._kinectron = new Kinectron(SERVER_IP);
-    console.log({ kinectron: this._kinectron });
 
-    // Connect with server over peer
-    // (not sure if necessary)
     this._kinectron.makeConnection();
+
+    this._kinectron.startTrackedJoint(this._kinectron.SPINEMID, (head) => this.onTrackedHead(head));
   }
 
-  ngAfterViewInit() {
-    this._kinectron.startTrackedJoint(this._kinectron.HEAD, this._onTrackedHead);
-  }
-
-  private _onTrackedHead(head) {
-    console.log('tracked head', { head });
-    this.positionChanges$.next(head.depthX * window.innerWidth);
+  onTrackedHead(data) {
+    if (data.cameraZ < 1.7){
+      this.positionChanges$.next(data.depthX * window.innerWidth);
+    }
   }
 }
 
 // typing for KInectron
 // https://kinectron.github.io/docs/api2.html
 declare class Kinectron {
-  constructor(id: string);
+  constructor(id?: string);
   makeConnection();
   startTrackedBodies(callback?: Function);
   startColor(callback: Function);

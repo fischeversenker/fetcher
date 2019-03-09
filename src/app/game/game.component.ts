@@ -2,9 +2,11 @@ import { AfterViewInit, Component, ComponentFactory, ComponentFactoryResolver, C
 import { BallComponent } from '../ball/ball.component';
 import { BasketComponent } from '../basket/basket.component';
 import { interval } from 'rxjs';
+import { takeUntil, takeWhile, finalize } from 'rxjs/operators';
 import { KinectService } from '../kinect.service';
 
-const BALL_ACCELERATION = 0.8;
+const BALL_ACCELERATION = 0.4;
+const GAME_DURATION = 30;
 
 @Component({
   selector: 'app-game',
@@ -20,9 +22,10 @@ export class GameComponent implements AfterViewInit {
   @ViewChild('balls', { read: ViewContainerRef }) ballContainer;
 
   score: number = 0;
-  mouseActivated: boolean = true;
+  timeLeft: number = 0;
+  mouseActivated: boolean = false;
 
-  private _running: true;
+  private _running: boolean;
   private _ballComponents: any[] = [];
   private _ballFactory: ComponentFactory<BallComponent>;
 
@@ -34,7 +37,11 @@ export class GameComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    interval(2000).subscribe(() => this.addBall());
+    interval(1500).subscribe(() => {
+      if (this._running) {
+        this.addBall();
+      }
+    });
 
     this._kinectService.positionChanges$.subscribe((x: number) => {
       if (!this.mouseActivated) {
@@ -66,7 +73,17 @@ export class GameComponent implements AfterViewInit {
 
   private _start() {
     this._running = true;
+    this.timeLeft = GAME_DURATION;
     this._update();
+    // countdown
+    interval(1000).pipe(
+      takeWhile(() => this.timeLeft > 0),
+      finalize(() => this._stop()),
+    ).subscribe(() => this.timeLeft--);
+  }
+
+  private _stop() {
+    this._running = false;
   }
 
   private _update() {

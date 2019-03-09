@@ -1,10 +1,5 @@
 <template #balls></template>
 <app-basket></app-basket>
 
-<button (click)='addBall()'>Add Ball</button>
-<div>
-  <label for='mouse'>Mouse activated</label>
-  <input id='mouse' type='checkbox' checked (change)='mouseActivated = !mouseActivated'>
-</div>
-
 <div class='score'>Score: {{ score }}</div>
+<div class='countdown'>Time left: {{ timeLeft }}</div>
