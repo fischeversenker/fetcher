@@ -5,6 +5,13 @@
   width: var(--size, 100px);
   height: var(--size, 100px);
   border-radius: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) rotate(0deg);
   background-color: rebeccapurple;
+  animation: rotate 3000ms infinite linear;
+}
+
+@keyframes rotate {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
